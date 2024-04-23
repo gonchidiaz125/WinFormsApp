@@ -159,20 +159,29 @@ namespace WinFormsApp
         }
         private void GrabarNueva()
         {
-            var localidad = new Localidad();
-            localidad.Nombre = txtLocalidad.Text;
-            localidad.Activo = chkActivo.Checked;
-            var idDepartamento = localidadRepository.Insert(localidad);
-
-            if (idDepartamento != 0)
+            var departamentoIdString = txtDepartamentoId.Text;
+            if (int.TryParse(departamentoIdString, out var departamentoId))
             {
-                MessageBox.Show("Localidad creada con éxito");
-                OcultarDetalles();
-                CargarLocalidades();
+                var localidad = new Localidad();
+                localidad.Nombre = txtLocalidad.Text;
+                localidad.IdDepartamento = departamentoId;
+                localidad.Activo = chkActivo.Checked;
+                var idLocalidad = localidadRepository.Insert(localidad);
+
+                if (idLocalidad > 0)
+                {
+                    MessageBox.Show("Localidad creada con éxito");
+                    OcultarDetalles();
+                    CargarLocalidades();
+                }
+                else
+                {
+                    MessageBox.Show("Error al intentar grabar la localidad");
+                }
             }
             else
             {
-                MessageBox.Show("Error al intentar grabar la localidad");
+                MessageBox.Show("El valor de Departamento ID debe ser numerico");
             }
         }
 
